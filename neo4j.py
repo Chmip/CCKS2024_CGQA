@@ -6,8 +6,8 @@ class AnswerSearcher:
     def __init__(self):
         self.g = Graph("http://localhost:7474", auth=("neo4j", "123456"), name="neo4j")
 
-    def cx(self, people, rex):
-        query = 'MATCH (p:`人物`)-[:`{0}`]->(m:`人物`) where p.name="{1}" return m.name'.format(rex, people)
+    def cx(self, E1, E1name, R, E2):
+        query = f'MATCH (p:`{E1}`)-[:`{R}`]->(m:`{E2}`) where p.name="{E1name}" return m.name'
         print(query)
         result = self.g.run(query)
         print(result.data())
@@ -16,4 +16,6 @@ class AnswerSearcher:
 
 def test():
     searcher = AnswerSearcher()
-    searcher.cx("梁棠", "侄子")
+    searcher.cx("人物", "梁棠", "侄子", "人物")
+
+test()
