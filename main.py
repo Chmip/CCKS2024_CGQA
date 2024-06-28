@@ -208,41 +208,66 @@ relation = [['堂姐', '侄孙媳妇', '弟媳', '导师', '堂小舅子', '大�
              '学校身份', '主要作品', '类别', '毕业院校', '知名人物', '所属机构', '制作', '登场作品', '配音',
              '相关国内联盟', '音乐作品', '简称', '经纪人', '为他人创作音乐', '出版社', '老板', '经纪公司', '代表',
              '领导', '继任', '参演', '现任领导', '编剧', '类型', '合作院校', '专职院士数', '主持', '法人', '学校类别']]
-def test2():
+
+
+def main1(questions):
+
+    last_result = {}
     myhanlp = my_hanlp()
-    count = 0
+    doc = myhanlp.dependency(questions)
+    t = Tree()
+    doctok = doc["tok/fine"]
+    dokdep = doc["dep"]
+    searcher = AnswerSearcher()
+    for index, value in enumerate(dokdep):
+        token = t.quick(doctok[index], value)
+        if len(token) >= 2:
+            if token[1] != '"' and token[1] in relation[0] or token[1] in relation[1]:
+                print(index, end= '')
+                print(questions[index])
+                #print(token)
+                result = searcher.er_(None, token[0], token[1], None)
+                #print(qa_data[str(index)]["answer"], end=' ')
+                if len(result) == 0:
+                    result = ['无']
+            else:
+                result = ['无']
+        else:
+            result = ['无']
+        print(result)
+        last_result[str(index)] = ['无']
+    with open('data1.json', 'w', encoding='utf-8') as f:
+        json.dump(last_result, f, ensure_ascii=False, indent=4)
+
+
+def test_all():
     with open('../data/test_qa.json', 'r', encoding='utf-8') as f:
         qa_data = json.loads(f.read())
         questions = []
         for key,_ in qa_data.items():
             q = qa_data[str(key)]['question']
             questions.append(q)
-        doc = myhanlp.dependency(questions)
-        t = Tree()
-        doctok = doc["tok/fine"]
-        dokdep = doc["dep"]
-        searcher = AnswerSearcher()
-        for index, value in enumerate(dokdep):
-            token = t.quick(doctok[index], value)
-            if len(token) >= 2:
-                if token[1] != '"' and token[1] in relation[0] or token[1] in relation[1]:
-                    print(index, end= '')
-                    print(questions[index])
-                    #print(token)
-                    result = searcher.er_(None, token[0], token[1], None)
-                    #print(qa_data[str(index)]["answer"], end=' ')
-                    if len(result) == 0:
-                        result = ['无']
-                else:
-                    result = ['无']
-            else:
-                result = ['无']
-            print(result)
-            qa_data[str(index)]["answer"] = result
-            '''if qa_data[str(index)]["answer"] == result:
-                count += 1'''
-        with open('data.json', 'w', encoding='utf-8') as f:
-            json.dump(qa_data, f, ensure_ascii=False, indent=4)
-    print(count)
+        main1(questions)
 
-test2()
+def test_dep_root():
+    with open('../data/train_qa.json', 'r', encoding='utf-8') as f:
+        qa_data = json.loads(f.read())
+        questions = []
+        for key in root_dict['谁']:
+            q = qa_data[str(key)]['question']
+            questions.append(q)
+        main1(questions)
+
+def test_len():
+    with open('../data/train_qa.json', 'r', encoding='utf-8') as f:
+        qa_data = json.loads(f.read())
+        questions = []
+        for key in length_dict[8]:
+            q = qa_data[str(key)]['question']
+            questions.append(q)
+        main1(questions)
+
+test_len()
+
+
+
