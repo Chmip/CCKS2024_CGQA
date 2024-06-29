@@ -28,9 +28,12 @@ class AnswerSearcher:
         else:
             E2 = f':`{E2}`'
         query = f'MATCH (p{E1})-[:`{R}`]->(m{E2}) where p.name="{E1name}" return m.name'
-        print(query)
-        result = self.g.run(query)
-        print(result.data())
+        #print(query)
+        results = self.g.run(query)
+        r = []
+        for result in results.data():
+            r.append(result['m.name'])
+        return r
 
     def e_e(self, E1, E1name, E2, E2name):
         if E1 == None:
@@ -66,23 +69,13 @@ class AnswerSearcher:
 
 def test():
     searcher = AnswerSearcher()
-    searcher.e(None, "岭表纪年/所知录/天南逸史")
-'''
-    searcher.er_(None, "岭表纪年/所知录/天南逸史", "作者", "人物")
-
-    searcher.er_("人物", "梁棠", "侄子", "人物")
-    searcher.e_e("人物", "梁棠", "人物", '梁商')
-
-    searcher.e_e(None, "钱澄之", None, "岭表纪年/所知录/天南逸史")
-    searcher.e_e(None, "由百丈过桃源望崖际不敢上", None, "钱澄之")
-
-    searcher.er_(None, "钱澄之", "文学作品", None)'''
 
 
+    searcher.er_(None, "钱澄之", "文学作品", None)
 
 
 
 
     #searcher.ER_(None, "岭表纪年/所知录/天南逸史", "作者", None)
 
-test()
+#test()
