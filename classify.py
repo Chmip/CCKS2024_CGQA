@@ -42,6 +42,35 @@ class QuestionPaser:
         self.r = "|".join(relation[0]+relation[1]+relation2[0]+relation2[1])
         self.r2 = "|".join(relation[2]+relation[1]+relation2[2])
         self.r_all = "|".join(relation[0] + relation[1] + relation[2] + relation2[0] + relation2[1] + relation2[2])
+        self.structure = [ f"(.*?)的({self.r_all})是",
+                           "(.*?)的(.*?)的",
+                           "的(.*?)的(.*?)是",
+                           f"的({self.r_all})是(.*?)？",
+                           '是谁',
+                           "有哪些",
+                           "多少",
+                           "是不是",
+                           "最多",
+                           "和(.*?)的",
+                           "(.*?)的(.*?)有",
+                           "(.*?)的(.*?)中",
+                           "(.*?)的(.*?)和",
+                           "({.*?})的(.*?)总",
+                           "和(.*?)的(.*?)是",
+                           "和(.*?)的(.*?)分别",
+
+                           "和(.*?)共",
+                           "的([^？，]*?)和(.*?)总",
+                           "的(.*?)和(.*?)中",
+                           "的(.*?)和(.*?)分别",
+                           "和(.*?)中",
+
+                           "(.*?)和(.*?)分别",
+                           "(.*?)和(.*?)的",
+                           f"({self.r_all})过(.*?)的",
+                           f"由(.*?)({self.r_all})的"]
+
+
         self.structure = [
                               f"(.*?)的?({self.r_all})？",
                               f"(.*?)的?({self.r_all})是",
