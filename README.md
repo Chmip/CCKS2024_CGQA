@@ -2,7 +2,7 @@
 
 ## 🌈 Model Architecture
 
-<img src="IMG/overview.png" width = 100% height = 100%/>
+<img src="IMG/数据流图.jpg" width = 100% height = 100%/>
 
 ## 📕 Dependencies
 
